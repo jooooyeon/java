@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %5p[%C] %m%n" />
+		</Console>
+	</Appenders>
+	
+	<Loggers>
+		
+		
+		<Root level ="trace">  <!-- 디폴드 값 트레이스로 설정 /  -->
+			<AppenderRef ref="console" />  <!-- 콘솔에서출력햇 -->
+		</Root>
+	</Loggers>
+</Configuration>

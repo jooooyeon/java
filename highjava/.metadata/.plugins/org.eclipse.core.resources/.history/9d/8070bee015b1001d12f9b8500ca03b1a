@@ -1,0 +1,287 @@
+package kr.or.ddit.basic;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.ExistingAnnotationsType;
+
+//기능 구현하기 ==> 전체 목록 출력, 새글작성, 수정, 삭제, 검색 
+public class noticeboardTest {
+	private Connection conn;
+	private Statement stmt;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+
+	private Scanner scan = new Scanner(System.in);
+	
+	
+	public void displayMenu() {
+		System.out.println("----------------------");
+		System.out.println("  === 작 업 선 택 ===");
+		System.out.println("1. 전체 목록 출력");
+		System.out.println("2. 새글 작성");
+		System.out.println("3. 수정");
+		System.out.println("4. 삭제");
+		System.out.println("5. 검색");
+	}
+	
+	
+	public void start() {
+		int choice;
+		do {
+			displayMenu(); // 메뉴 출력
+			choice = scan.nextInt(); // 메뉴번호 입력받기
+			switch (choice) {
+			case 1: // 전체 목록 출력
+				viewAllNoticeboard();
+				break;
+			case 2: //새글작성
+				createNewNoticeboard();
+				break;
+			case 3: //수정
+				updateNoticeboard();
+				break;
+			case 4: //삭제
+				deleteNoticeboard();
+				break;
+			case 5: //검색
+				searchNoticeboard();
+				break;
+			default:
+				System.out.println("번호를 잘못 입력했습니다. 다시입력하세요");
+	}
+	
+		}while(choice!=5);
+
+}//start 끝
+
+	private void searchNoticeboard() {
+		
+		
+		
+		
+		
+//		"select * from mymember where 1=1 "
+//		and mem_addr like '%' || ? || '%'
+//		
+		
+	}
+
+
+	private void deleteNoticeboard() {
+		System.out.println("삭제할 게시글 정보입력");
+		System.out.println("작성자 >>");
+		String boardWriter = scan.next();
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			String sql = " delete from JDBC_BOARD where BOARD_WRITER = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, boardWriter);
+			
+			int cnt = pstmt.executeUpdate();
+			
+			if(cnt >0) {
+				System.out.println("게시글 삭제 완료");
+			}else {
+				System.out.println("게시글삭제 실패");
+			}
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.close(conn, stmt, pstmt, rs);
+		}
+		
+		
+		
+		
+		
+	}
+
+
+	private void updateNoticeboard() {
+		boolean isExist = false;
+		String boardWriter = "";
+		do {
+			System.out.println("수정할 게시판의 작성자를 입력하세요");
+			System.out.print("작성자>>");
+			boardWriter = scan.nextLine();
+			
+			isExist = checkBoard(boardWriter);
+			
+			if(!isExist) {
+				System.out.println("작성자가 존재하지 않습니다");
+			}
+			
+		}while(!isExist);
+		
+		System.out.println("변경할 내용 작성 >>");
+		String boardContent = scan.nextLine();
+		
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			String sql = " update jdbc_board"
+						+ " set BOARD_CONTENT = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, boardContent);
+			
+			int cnt = pstmt.executeUpdate();
+			
+			if(cnt >0) {
+				System.out.println("내용수정성공");
+			}else {
+				System.out.println("내용수정실패");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.close(conn, stmt, pstmt, rs);
+			
+		};
+		
+	}
+	
+	
+
+	
+	
+	private void createNewNoticeboard() {
+	
+			
+			System.out.println("게시글 작성 시작");
+			System.out.println(">>제목 입력");
+			String boardTitle = scan.next();
+			
+			System.out.println(">>작성자 입력");
+			String boardWriter = scan.next();
+			
+			System.out.println(">>작성 날짜");
+			String boardDate = scan.next();
+			
+			System.out.println(">>내용 입력");
+			String boardContent = scan.next();
+			
+			scan.nextLine();
+			
+			try {
+				
+				conn = JDBCUtil.getConnection();
+				
+				String sql = "insert into jdbc_board( BOARD_TITLE, BOARD_WRITER, BOARD_DATE, BOARD_CONTENT ) " 
+						  + "values( ?, ?, ?, ? )" ;
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, boardTitle);
+				pstmt.setString(2, boardWriter);
+				pstmt.setString(3, boardDate);
+				pstmt.setString(4, boardContent);
+				
+				int cnt = pstmt.executeUpdate();
+				
+				if(cnt <0 ) {
+					System.out.println("게시글작성실패!!!");
+				}else {
+					System.out.println("게시글작성성공");
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally {
+				JDBCUtil.close(conn, stmt, pstmt, rs);
+			}
+			
+		
+	}
+
+
+	// 전체 목록 출력
+	private void viewAllNoticeboard() {
+		
+		System.out.println("번호\t제목\t작성자\t작성날짜\t내용");
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			String sql = " select * from jdbc_board order by 1 ";
+			stmt = conn.createStatement();
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				String boardNo = rs.getString("BOARD_NO");
+				String boardTitle = rs.getString("BOARD_TITLE");
+				String boardWriter = rs.getString("BOARD_WRITER");
+				String boardDate = rs.getString("BOARD_DATE");
+				String boardContent = rs.getString("BOARD_CONTENT");
+				
+				System.out.println(boardNo+ "\t" + boardTitle+ "\t" +boardWriter + "\t" + boardDate+ "\t" +boardContent );
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			
+		}
+		
+	}//viewAllNoticeboard 끝
+	
+	
+	private boolean checkBoard(String boardWriter) {
+		
+		boolean isExist = false;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			String sql = "select  count(*) from JDBC_BOARD where BOARD_WRITER = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, boardWriter);
+			
+			rs = pstmt.executeQuery();
+			
+			int cnt = 0;
+			while(rs.next()) {
+				cnt = rs.getInt(3);
+			}
+			if(cnt > 0) {
+				isExist = true;
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}finally {
+			JDBCUtil.close(conn, stmt, pstmt, rs);
+			
+		}
+		
+		return isExist;
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		noticeboardTest nb = new noticeboardTest();
+		nb.start();
+	}
+}
+
+
+

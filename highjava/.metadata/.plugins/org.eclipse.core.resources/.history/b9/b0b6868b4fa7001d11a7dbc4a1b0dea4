@@ -1,0 +1,40 @@
+package kr.or.ddit.basic;
+
+public class T13ThreadStopTest {
+	public static void main(String[] args) {
+		
+		Thread th1 = new ThreadStop1();
+		th1.start();
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		th1.stop();
+				
+	}
+}
+class ThreadStop1 extends Thread{
+	
+	private boolean isStoped;
+	
+	
+	
+	public void setStoped(boolean isStoped) {
+		this.isStoped = isStoped;
+	}
+
+
+
+	@Override
+	public void run() {
+		while(!isStoped) {
+			System.out.println("스레드 처리 작업 중...");
+		}
+		System.out.println("자원 정리 중...");
+		System.out.println("실행 종료.");
+	}
+}

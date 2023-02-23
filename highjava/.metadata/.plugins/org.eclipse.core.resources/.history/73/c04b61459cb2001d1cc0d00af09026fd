@@ -1,0 +1,27 @@
+package kr.or.ddit.member;
+
+import java.util.List;
+
+public interface BoardServiceDao {
+	
+	//BoardVO에 담겨진 자료를 DB에 입력하기 위한 메서드
+	public int insertBoard(BoardVO bv); 
+	
+	//업데이트/수정
+	public int updateBoard(BoardVO bv);
+	
+	// 일치하는 번호가 있는지 여부 확인
+	public boolean checkBoardNo(BoardVO bv);
+	
+	//보드 삭제 
+	public int deleteBoard(BoardVO bv);
+	
+	//전체검색
+	List<BoardVO> selectAllBoard();
+	
+	
+	//일부검색
+	List<BoardVO> searchBoard();
+	
+
+}

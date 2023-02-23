@@ -1,0 +1,140 @@
+package kr.or.ddit.member;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+
+public class MyBatisBoardDao {
+
+	public <T> T selecOne(String statement) {
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance(true);
+
+		T obj = null;
+
+		try {
+
+			obj = sqlSession.selectOne(statement);
+
+		} catch (PersistenceException e) {
+			throw new RuntimeException("마이바티스 조회중 에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return obj;
+	}
+
+	public <T> T selecOne(String statement, Object parameter) {
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance(true);
+
+		T obj = null;
+
+		try {
+
+			obj = sqlSession.selectOne(statement, parameter);
+
+		} catch (PersistenceException e) {
+			throw new RuntimeException("마이바티스 조회중 에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return obj;
+	}
+
+	public <T> List<T> selectList(String statement) {
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance(true);
+
+		List<T> list = Collections.EMPTY_LIST;
+
+		try {
+			list = sqlSession.selectList(statement);
+		} catch (PersistenceException e) {
+			throw new RuntimeException("마이바티스 목록조회중 에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return list;
+	}
+
+	public <T> List<T> selectList(String statement, Object parameter) {
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance(true);
+
+		List<T> list = Collections.EMPTY_LIST;
+
+		try {
+			list = sqlSession.selectList(statement, parameter);
+		} catch (PersistenceException e) {
+			throw new RuntimeException("마이바티스 목록조회중 에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return list;
+	}
+
+	public int insert(String statement, Object parameter) {
+
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance();
+
+		int cnt = 0;
+
+		try {
+
+			cnt = sqlSession.insert(statement, parameter);
+
+			sqlSession.commit();
+
+		} catch (PersistenceException e) {
+			throw new RuntimeException("마이바티스 데이터등록중에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return cnt;
+
+	}
+
+	public int update(String statement, Object parameter) {
+
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance();
+
+		int cnt = 0;
+
+		try {
+
+			cnt = sqlSession.update(statement, parameter);
+
+			sqlSession.commit();
+
+		} catch (PersistenceException e) {
+			sqlSession.rollback();
+			throw new RuntimeException("마이바티스 데이터수정중에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return cnt;
+
+	}
+
+	public int delete(String statement, Object parameter) {
+
+		SqlSession sqlSession = MyBatisUtilBoard.getInstance();
+
+		int cnt = 0;
+
+		try {
+
+			cnt = sqlSession.delete(statement, parameter);
+
+			sqlSession.commit();
+
+		} catch (PersistenceException e) {
+			sqlSession.rollback();
+			throw new RuntimeException("마이바티스 데이터삭제중에러", e);
+		} finally {
+			sqlSession.close();
+		}
+		return cnt;
+
+	}
+
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+  <configuration>
+  
+  <properties resource="db.properties" />  <!-- 위치 지정 / 거기에 아이디비번 url등 작성되어 있음 --> 
+  
+  <typeAliases>  <!-- 타입에 별명을 지정하여 별명입력시 다 안적어도됨 -->
+  	<typeAlias type="kr.or.ddit.member.vo.MemberVO" alias="memVO"/>
+  </typeAliases>
+  
+  
+  	<environments default="dev"><!-- dev값을 사용하겠다 / enviroment가 여러개일 경우 이 부분만 변경해서 사용자 변경가능 -->
+  		<environment id="dev">
+  			<transactionManager type="JDBC" />
+  			<dataSource type="POOLED">
+  				<property name="driver" value="${driver}"/><!-- db.properties에 저장된 내용 불러오기 ${} -->
+  				<property name="url" value="${url}"/>
+  				<property name="username" value="${user}"/>
+  				<property name="password" value="${password}"/>
+  				<!-- 활성화된 최대 커넥션 수  -->
+  				<property name="poolMaximumActiveConnections" value="2"/>
+  				<!-- 유휴상태(쉬는 상태)에서 최대 커넥션 수  -->
+  				<property name="poolMaximumIdleConnections" value="2"/>
+  				
+  				
+  			</dataSource>  		
+  		</environment>
+  	</environments>
+  
+  	
+  	<!-- 매퍼위치정보제공 (아이디 정보 등) -->
+  	<mappers>
+  		<mapper resource="mappers/member.xml"/>
+  	</mappers>
+  	
+  	
+  	
+  	
+  
+  </configuration>
+  
+  
+  
+  
+  <!-- 커넥션이 자주일어나는 상황에서 커넥션 풀 사용시 유용함
+  하지만 메모리의 부담이 큼
+  커넥션 맺는 과정이 가장 오래걸리는데 그 거넥션을 미리 커넥션 풀에 저장하여 사용? -->

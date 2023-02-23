@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;T09PhoneBookTest.java&apos; to &apos;JavaIOTest/src/kr.or.ddit.basic&apos;&#x0D;&#x0A;- Original project: &apos;CollectionTest&apos;&#x0D;&#x0A;- Destination element: &apos;JavaIOTest/src/kr.or.ddit.basic&apos;&#x0D;&#x0A;- Original element: &apos;kr.or.ddit.basic.T09PhoneBookTest.java&apos;" description="Copy compilation unit" destination="=JavaIOTest/src&lt;kr.or.ddit.basic" element1="/src&lt;kr.or.ddit.basic{T09PhoneBookTest.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1676335626328" units="1" version="1.0"/>
+</session>

@@ -1,0 +1,92 @@
+package kr.or.ddit.basic;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+//기능 구현하기 ==> 전체 목록 출력, 새글작성, 수정, 삭제, 검색 
+public class noticeboardTest {
+	private Connection conn;
+	private Statement stmt;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+
+	private Scanner scan = new Scanner(System.in);
+	
+	
+	public void displayMenu() {
+		System.out.println("----------------------");
+		System.out.println("  === 작 업 선 택 ===");
+		System.out.println("1. 전체 목록 출력");
+		System.out.println("2. 새글 작성");
+		System.out.println("3. 수정");
+		System.out.println("4. 삭제");
+		System.out.println("5. 검색");
+	}
+	
+	
+	public void start() {
+		int choice;
+		do {
+			displayMenu(); // 메뉴 출력
+			choice = scan.nextInt(); // 메뉴번호 입력받기
+			switch (choice) {
+			case 1: // 전체 목록 출력
+				viewAllNoticeboard();
+				break;
+			case 2: //새글작성
+				createNewNoticeboard();
+				break;
+			case 3: //수정
+				updateNoticeboard();
+				break;
+			case 4: //삭제
+				deleteNoticeboard();
+				break;
+			case 5: //검색
+				searchNoticeboard();
+				break;
+			default:
+				System.out.println("번호를 잘못 입력했습니다. 다시입력하세요");
+	}
+	
+		}while(choice!=5);
+
+}//start 끝
+
+	// 전체 목록 출력
+	private void viewAllNoticeboard() {
+		
+		System.out.println("번호\t제목\t작성자\t작성날짜\t내용");
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			String sql = " select * from jdbc_board order by 1 ";
+			stmt = conn.createStatement();
+			
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				String boardNo = rs.getString("BOARD_NO");
+				String boardTitle = rs.getString("BOARD_NO");
+				String boardWriter = rs.getString("BOARD_NO");
+				String boardDate = rs.getString("BOARD_NO");
+				String boardContent = rs.getString("BOARD_NO");
+				
+				System.out.println(boardNo+ "\t" + boardTitle+ "\t" +boardWriter + "\t" + boardDate+ "\t" +boardContent );
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			
+		}
+		
+	}//viewAllNoticeboard 끝
+	
+}

@@ -1,0 +1,35 @@
+package kr.or.ddit.basic;
+
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+
+// URL: uniform resource locator = 특정한 리소스의 위치
+public class URLTest {
+	public static void main(String[] args) throws MalformedURLException, URISyntaxException {
+		//URL 클래스 => 인터넷에 존재하는 서버들의 자원에 접근할 수 있는 주소를 관리하는 클래스
+		URL url = new URL("http","ddit.or.kr",80,"/main/index.html?ttt=123#kkk");
+		
+		System.out.println("전체 URL주소 : " + url.toString());
+		
+		System.out.println("protocol : " + url.getProtocol()); // 프로토콜: http : 
+		System.out.println("host : " + url.getHost()); //호스트 : ddit.or.kr :
+		System.out.println("query : " + url.getQuery());// query : ttt=123
+		System.out.println("file : " + url.getFile()); // file : /main/index.html?ttt=123 //쿼리가 포함되면 파일
+		System.out.println("path : " + url.getPath());// path : /main/index.html  //쿼리가 포함되지 않으면 패스
+		System.out.println("port : " + url.getPort()); //포트 :  80 / 80이 디폴드 값임. 생략되어있담ㄴ 80
+		System.out.println("ref : " + url.getRef()); // ref : kkk (래퍼런스 참조) #+아이디값 
+		System.out.println();
+		
+		System.out.println(url.toExternalForm());
+		System.out.println(url.toString());
+		System.out.println(url.toURI().toString());
+		
+		//URL과 URI차이
+		//uniform resource identifier 식별자
+		//인터넷의 우편물 주소같은 것으로 정보 리스소를 고유하게 식별하고 위치를 지정할 수 있음
+		//URI의 두가지 형태 1. URL 2. URN
+		
+	}
+}

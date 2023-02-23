@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %5p[%C] %m%n" />
+		</Console>
+	</Appenders>
+	
+	<Loggers>
+		<Root level ="debug">  <!-- 디폴드 값이 디버그이닷 설정 / 보고싶은 모든 로그의 레벨은 디버그 또는 디버그 보다 우선순위가 높은 것 볼수잇음 -->
+			<AppenderRef ref="console" />  <!-- 콘솔에서출력햇 -->
+		</Root>
+	</Loggers>
+</Configuration>

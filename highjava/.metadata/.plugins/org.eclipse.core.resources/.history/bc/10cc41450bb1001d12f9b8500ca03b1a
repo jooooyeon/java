@@ -1,0 +1,28 @@
+package kr.or.ddit.basic;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class JDBCUtil {
+	static {
+		try {
+			Class.forName("orcal.jdbc.driver.OracleDriver");
+			System.out.println("드라이버 로딩 완료");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public static Connection getConnection() {
+		try {
+			return DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521/xe", 
+					"ljy92",
+					"java");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+}

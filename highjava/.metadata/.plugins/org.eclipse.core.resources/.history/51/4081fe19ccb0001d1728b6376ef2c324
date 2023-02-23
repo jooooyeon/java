@@ -1,0 +1,66 @@
+package kr.or.ddit.basic;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import kr.or.ddit.member.vo.MemberVO;
+
+public class MemberMybatisTest {
+	public static void main(String[] args) {
+		// myBatis를 이용하여 DB자료를 읽어와 처리하는 작업 순서
+		// 1. myBatis의 환경설정파일을 읽어와 myBatis 객체를 생성한다.
+		
+		SqlSessionFactory sqlSessionFactory = null; //sql세션 팩토리를 가지고 sql세션을 만들것임 팩토리를 만들었으니 언제나 세션을 만들수있음
+		
+		try {
+			// 1-1. xml문서 읽어오기
+			Charset charset = Charset.forName("UTF-8"); //설정파일의 한글처리용
+			Resources.setCharset(charset);
+			
+			Reader rd = Resources.getResourceAsReader("config/mybatis-config.xml");
+			
+			//1-2. 위에서 읽어온 Reader개체를 이용하여 실제 작업을 진행할 객체 생성하기
+			sqlSessionFactory = new SqlSessionFactoryBuilder().build(rd);//리더 객체가 필요함 그래서 위에서 리더개체를 생성
+			
+			rd.close(); // Reader 닫기
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		// 2. 실행할 SQL문에 맞는 쿼리문을 호출해서 원하는 작업을 수행한다.
+		
+		// 2-1. insert작업 연습
+		System.out.println("insert 작업 시작...");	
+		
+		// 1) 저장할 테이터를 VO에 담는다.
+		MemberVO mv = new MemberVO();
+		
+		mv.setMemId("d002");
+		mv.setMemName("강감찬");
+		mv.setMemTel("010-3333-3333");
+		mv.setMemAddr("경남 창원시");
+		
+		// 2) SqlSession 객체변수를 이용하여 해당 쿼리문을 실행한다.
+		// 예) sqlSession.insert("namespace값.id값", 파라미터객체);
+		//			반환값 : 성공한 레코드 수
+//		SqlSession session = sqlSessionFactory.openSession(); //파라미터를 안넣으면 오토커밋을 안쓰겠다 라는 뜻임
+		SqlSession session = sqlSessionFactory.openSession(true); //오토커밋 불리언타입 킨거임?
+		
+		int cnt = session.insert("memberTest.insertMember", mv);		
+		
+		
+		
+		
+		
+		
+	}
+}
